@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "FeatureBranch": {
-      "type": "string"
-      
+      "type": "string",
+      "defaultValue": "f1234"
     }
   },
   "resources": [
     {
-      "name": "name",
+      "name": "[concat(parameters('FeatureBranch'),'dbserver')]",
       "type": "Microsoft.Sql/servers",
       "location": "[resourceGroup().location]",
       "apiVersion": "2014-04-01",
