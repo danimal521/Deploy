@@ -3,8 +3,8 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "FeatureBranch": {
-      "type": "string",
-      "defaultValue": "f1234"
+      "type": "string"
+      
     }
   },
   "resources": [
@@ -14,8 +14,8 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "2014-04-01",
       "properties": {
-        "administratorLogin": "somelogin",
-        "administratorLoginPassword": "somepasswordD1!"
+        "administratorLogin": "danimal",
+        "administratorLoginPassword": "Westfur!135$!45"
       }
     }
   ]
