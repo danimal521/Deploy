@@ -3,7 +3,8 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "FeatureBranch": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "f1234"
     },
     "siteName": {
       "type": "string"
@@ -85,6 +86,10 @@
               {
                 "name": "someAppSetting",
                 "value": "[parameters('someAppSetting')]"
+              },
+              {
+                "name": "FeatureBranch",
+                "value": "[parameters('FeatureBranch')]"
               }
             ]
           }
