@@ -2,16 +2,13 @@
   "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "FeatureBranch": {
-      "type": "string",
-      "defaultValue": "f1234"
-    }
+    
   },
   "resources": [
     {
       "name": "name",
       "type": "Microsoft.Sql/servers",
-      "location": "[resourceGroup().location]",
+      "location": "East US",
       "apiVersion": "2014-04-01",
       "properties": {
         "administratorLogin": "somelogin",
