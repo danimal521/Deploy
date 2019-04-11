@@ -9,7 +9,7 @@
   },
   "resources": [
     {
-      "name": "$(Build.SourceBranchName)dbserver",
+      "name": "$(Build.SourceBranchName)dbserver66",
       "type": "Microsoft.Sql/servers",
       "location": "[resourceGroup().location]",
       "apiVersion": "2014-04-01",
