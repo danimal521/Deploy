@@ -11,7 +11,7 @@
     {
       "name": "[concat(parameters('FeatureBranch'),'dbserver')]",
       "type": "Microsoft.Sql/servers",
-      "location": "[resourceGroup().location]",
+      "location": "East US",
       "apiVersion": "2014-04-01",
       "properties": {
         "administratorLogin": "danimal",
