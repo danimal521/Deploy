@@ -8,15 +8,6 @@
     }
   },
   "resources": [
-    {
-      "name": "[concat(parameters('FeatureBranch'),'dbserver')]",
-      "type": "Microsoft.Sql/servers",
-      "location": "East US",
-      "apiVersion": "2014-04-01",
-      "properties": {
-        "administratorLogin": "danimal",
-        "administratorLoginPassword": "Westfur!135$!45"
-      }
-    }
+    
   ]
 }
