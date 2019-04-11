@@ -9,7 +9,7 @@
   },
   "resources": [
     {
-      "name": "f4444dbserver",
+      "name": "$(Build.SourceBranchName)dbserver",
       "type": "Microsoft.Sql/servers",
       "location": "[resourceGroup().location]",
       "apiVersion": "2014-04-01",
