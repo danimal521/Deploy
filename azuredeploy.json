@@ -4,12 +4,19 @@
   "parameters": {
     "FeatureBranch": {
       "type": "string",
-      "defaultValue": "f2222"
+      "defaultValue": "f1234"
     }
   },
   "resources": [
-    
-
-
+    {
+      "name": "f4444dbserver",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01",
+      "properties": {
+        "administratorLogin": "danimal",
+        "administratorLoginPassword": "Westfur!135$!45"
+      }
+    }
   ]
 }
