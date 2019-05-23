@@ -4,7 +4,7 @@
   "parameters": {
     "FeatureBranch": {
       "type": "string",
-      "defaultValue": "f1234"
+      "defaultValue": "f12345"
     }
   },
   "resources": [
