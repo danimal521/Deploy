@@ -2,10 +2,6 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "Resource Group Name2": {
-      "defaultValue": "doi.bor.projectname",
-      "type": "string"
-  },
     "Project Name": {
       "defaultValue": "doi.bor.projectname",
       "type": "string"
