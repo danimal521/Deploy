@@ -9,26 +9,70 @@
   },
   "variables": {},
   "resources": [      
+    {
+          "type": "Microsoft.Storage/storageAccounts",
+          "apiVersion": "2019-04-01",
+          "name": "[concat(parameters('Project Name'), '_storage')]",
+          "location":"Central US",
+          "sku": {
+              "name": "Standard_RAGRS",
+              "tier": "Standard"
+          },
+          "kind": "StorageV2"
+      },
       {
-          "type": "Microsoft.Web/serverfarms",
-          "apiVersion": "2016-09-01",
+          "type": "Microsoft.Web/sites",
+          "apiVersion": "2016-08-01",
           "name": "[concat(parameters('Project Name'), '_functionapp')]",
           "location": "Central US",
-          "sku": {
-              "name": "Y1",
-              "tier": "Dynamic",
-              "size": "Y1",
-              "family": "Y",
-              "capacity": 0
-          },
+          "dependsOn": [
+              "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), '_app_plan'))]"
+          ],
           "kind": "functionapp",
           "properties": {
-              "name": "[concat(parameters('Project Name'), '_functionapp')]",
-              "perSiteScaling": false,
+              "enabled": true,
+              "hostNameSslStates": [
+                  {
+                      "name": "[concat(parameters('Project Name'), '.azurewebsites.net')]",
+                      "sslState": "Disabled",
+                      "hostType": "Standard"
+                  },
+                  {
+                      "name": "[concat(parameters('Project Name'), '.scm.azurewebsites.net')]",
+                      "sslState": "Disabled",
+                      "hostType": "Repository"
+                  }
+              ],
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), '_app_plan'))]",
               "reserved": false,
-              "targetWorkerCount": 0,
-              "targetWorkerSizeId": 0
+              "scmSiteAlsoStopped": false,
+              "clientAffinityEnabled": false,
+              "clientCertEnabled": false,
+              "hostNamesDisabled": false,
+              "containerSize": 1536,
+              "dailyMemoryTimeQuota": 0,
+              "httpsOnly": true
           }
-      }
+      },{
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2016-09-01",
+        "name": "[concat(parameters('Project Name'), '_app_plan')]",
+        "location": "Central US",
+        "sku": {
+            "name": "Y1",
+            "tier": "Dynamic",
+            "size": "Y1",
+            "family": "Y",
+            "capacity": 0
+        },
+        "kind": "functionapp",
+        "properties": {
+            "name": "[concat(parameters('Project Name'), '_app_plan')]",
+            "perSiteScaling": false,
+            "reserved": false,
+            "targetWorkerCount": 0,
+            "targetWorkerSizeId": 0
+        }
+    }
   ]
 }
