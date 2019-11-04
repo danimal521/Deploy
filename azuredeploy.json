@@ -4,7 +4,7 @@
   "parameters": {
     "project_name": {
       "defaultValue": "doi.bor.projectname",
-      "type": "String"
+      "type": "string"
   }
   },
   "variables": {},
@@ -18,28 +18,7 @@
               "name": "Standard_RAGRS",
               "tier": "Standard"
           },
-          "kind": "StorageV2",
-          "properties": {
-              "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [],
-                  "ipRules": [],
-                  "defaultAction": "Allow"
-              },
-              "supportsHttpsTrafficOnly": true,
-              "encryption": {
-                  "services": {
-                      "file": {
-                          "enabled": true
-                      },
-                      "blob": {
-                          "enabled": true
-                      }
-                  },
-                  "keySource": "Microsoft.Storage"
-              },
-              "accessTier": "Hot"
-          }
+          "kind": "StorageV2"
       }
   ]
 }
