@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "Project Name": {
-      "defaultValue": "doi.bor.projectname",
+      "defaultValue": "projectname",
       "type": "string"
   }
   },
@@ -12,7 +12,7 @@
       {
           "type": "Microsoft.Storage/storageAccounts",
           "apiVersion": "2019-04-01",
-          "name": "[parameters('Project Name')]",
+          "name": "[concat(parameters('Project Name'), 'storage')]",
           "location":"East US 2",
           "sku": {
               "name": "Standard_RAGRS",
