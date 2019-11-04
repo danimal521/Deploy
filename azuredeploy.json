@@ -8,8 +8,7 @@
   }
   },
   "variables": {},
-  "resources": [
-      
+  "resources": [      
       {
           "type": "Microsoft.Web/serverfarms",
           "apiVersion": "2016-09-01",
@@ -24,7 +23,7 @@
           },
           "kind": "functionapp",
           "properties": {
-              "name": "CentralUSPlan",
+              "name": "[concat(parameters('Project Name'), '_functionapp')]",
               "perSiteScaling": false,
               "reserved": false,
               "targetWorkerCount": 0,
