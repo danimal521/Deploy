@@ -12,7 +12,7 @@
       {
           "type": "Microsoft.Storage/storageAccounts",
           "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('Project Name'), 'storage')]",
+          "name": "[concat(parameters('Project Name'), '_storage')]",
           "location":"East US 2",
           "sku": {
               "name": "Standard_RAGRS",
