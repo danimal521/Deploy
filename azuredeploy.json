@@ -9,17 +9,7 @@
   },
   "variables": {},
   "resources": [
-      {
-          "type": "Microsoft.Storage/storageAccounts",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('Project Name'), '_storage')]",
-          "location":"Central US",
-          "sku": {
-              "name": "Standard_RAGRS",
-              "tier": "Standard"
-          },
-          "kind": "StorageV2"
-      },
+      
       {
           "type": "Microsoft.Web/serverfarms",
           "apiVersion": "2016-09-01",
