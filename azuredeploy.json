@@ -5,62 +5,14 @@
     "Project Name": {
         "defaultValue": "projectname",
         "type": "String"
-    },
-      "sites_bikeshopaf_name": {
-          "defaultValue": "bikeshopaf",
-          "type": "String"
-      },
-      "serverfarms_CentralUSPlan_name": {
-          "defaultValue": "CentralUSPlan",
-          "type": "String"
-      },
-      "storageAccounts_bikeshop_name": {
-          "defaultValue": "bikeshop",
-          "type": "String"
-      },
-      "storageAccounts_bikeshopafstorage_name": {
-          "defaultValue": "bikeshopafstorage",
-          "type": "String"
-      }
+    }
   },
   "variables": {},
-  "resources": [
+  "resources": [      
       {
           "type": "Microsoft.Storage/storageAccounts",
           "apiVersion": "2019-04-01",
-          "name": "[parameters('storageAccounts_bikeshop_name')]",
-          "location": "westus2",
-          "sku": {
-              "name": "Standard_RAGRS",
-              "tier": "Standard"
-          },
-          "kind": "StorageV2",
-          "properties": {
-              "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [],
-                  "ipRules": [],
-                  "defaultAction": "Allow"
-              },
-              "supportsHttpsTrafficOnly": true,
-              "encryption": {
-                  "services": {
-                      "file": {
-                          "enabled": true
-                      },
-                      "blob": {
-                          "enabled": true
-                      }
-                  },
-                  "keySource": "Microsoft.Storage"
-              },
-              "accessTier": "Hot"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts",
-          "apiVersion": "2019-04-01",
-          "name": "[parameters('storageAccounts_bikeshopafstorage_name')]",
+          "name": "[concat(parameters('Project Name'), 'storage')]",
           "location": "eastus",
           "tags": {
               "hidden-related:/providers/Microsoft.Web/sites/bikeshopaf": "empty"
@@ -94,7 +46,7 @@
       {
           "type": "Microsoft.Web/serverfarms",
           "apiVersion": "2016-09-01",
-          "name": "[parameters('serverfarms_CentralUSPlan_name')]",
+          "name": "[concat(parameters('Project Name'), 'appservice')]",
           "location": "Central US",
           "sku": {
               "name": "Y1",
@@ -105,7 +57,7 @@
           },
           "kind": "functionapp",
           "properties": {
-              "name": "[parameters('serverfarms_CentralUSPlan_name')]",
+              "name": "[concat(parameters('Project Name'), 'appservice')]",
               "perSiteScaling": false,
               "reserved": false,
               "targetWorkerCount": 0,
@@ -115,9 +67,9 @@
       {
           "type": "Microsoft.Storage/storageAccounts/blobServices",
           "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('storageAccounts_bikeshop_name'), '/default')]",
+          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default')]",
           "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_bikeshop_name'))]"
+              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
           ],
           "properties": {
               "cors": {
@@ -131,9 +83,9 @@
       {
           "type": "Microsoft.Storage/storageAccounts/blobServices",
           "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('storageAccounts_bikeshopafstorage_name'), '/default')]",
+          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default')]",
           "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_bikeshopafstorage_name'))]"
+              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
           ],
           "properties": {
               "cors": {
@@ -150,7 +102,7 @@
           "name": "[parameters('sites_bikeshopaf_name')]",
           "location": "Central US",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_CentralUSPlan_name'))]"
+              "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'appservice'))]"
           ],
           "kind": "functionapp",
           "properties": {
@@ -167,7 +119,7 @@
                       "hostType": "Repository"
                   }
               ],
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_CentralUSPlan_name'))]",
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'appservice'))]",
               "reserved": false,
               "scmSiteAlsoStopped": false,
               "clientAffinityEnabled": false,
@@ -354,10 +306,10 @@
       {
           "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
           "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('storageAccounts_bikeshop_name'), '/default/azure-webjobs-hosts')]",
+          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/azure-webjobs-hosts')]",
           "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_bikeshop_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_bikeshop_name'))]"
+              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
+              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
           ],
           "properties": {
               "publicAccess": "None"
@@ -366,10 +318,10 @@
       {
           "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
           "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('storageAccounts_bikeshop_name'), '/default/azure-webjobs-secrets')]",
+          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/azure-webjobs-secrets')]",
           "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_bikeshop_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_bikeshop_name'))]"
+              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
+              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
           ],
           "properties": {
               "publicAccess": "None"
@@ -378,10 +330,10 @@
       {
           "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
           "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('storageAccounts_bikeshop_name'), '/default/data')]",
+          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/data')]",
           "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_bikeshop_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_bikeshop_name'))]"
+              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
+              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
           ],
           "properties": {
               "publicAccess": "None"
