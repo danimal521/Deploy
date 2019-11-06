@@ -5,22 +5,6 @@
         "Project Name": {
             "defaultValue": "projectname",
             "type": "String"
-        },
-        "sites_borfunctionapp_name": {
-            "defaultValue": "borfunctionapp",
-            "type": "String"
-        },
-        "serverfarms_ASP_BOR_86ba_name": {
-            "defaultValue": "ASP-BOR-86ba",
-            "type": "String"
-        },
-        "components_borfunctionapp_name": {
-            "defaultValue": "borfunctionapp",
-            "type": "String"
-        },
-        "storageAccounts_borstorage_name": {
-            "defaultValue": "borstorage",
-            "type": "String"
         }
     },
     "variables": {},
