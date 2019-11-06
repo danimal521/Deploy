@@ -99,7 +99,7 @@
       {
           "type": "Microsoft.Web/sites",
           "apiVersion": "2016-08-01",
-          "name": "[parameters('sites_bikeshopaf_name')]",
+          "name": "[concat(parameters('Project Name'), 'web')]",
           "location": "Central US",
           "dependsOn": [
               "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'appservice'))]"
@@ -109,12 +109,12 @@
               "enabled": true,
               "hostNameSslStates": [
                   {
-                      "name": "[concat(parameters('sites_bikeshopaf_name'), '.azurewebsites.net')]",
+                      "name": "[concat(concat(parameters('Project Name'), 'web'), '.azurewebsites.net')]",
                       "sslState": "Disabled",
                       "hostType": "Standard"
                   },
                   {
-                      "name": "[concat(parameters('sites_bikeshopaf_name'), '.scm.azurewebsites.net')]",
+                      "name": "[concat(concat(parameters('Project Name'), 'web'), '.scm.azurewebsites.net')]",
                       "sslState": "Disabled",
                       "hostType": "Repository"
                   }
@@ -133,10 +133,10 @@
       {
           "type": "Microsoft.Web/sites/config",
           "apiVersion": "2016-08-01",
-          "name": "[concat(parameters('sites_bikeshopaf_name'), '/web')]",
+          "name": "[concat(concat(parameters('Project Name'), 'web'), '/web')]",
           "location": "Central US",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('sites_bikeshopaf_name'))]"
+              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
           ],
           "properties": {
               "numberOfWorkers": 1,
@@ -233,10 +233,10 @@
       {
           "type": "Microsoft.Web/sites/deployments",
           "apiVersion": "2016-08-01",
-          "name": "[concat(parameters('sites_bikeshopaf_name'), '/317cab8f6891491ca239b6ed2d6c3f7e')]",
+          "name": "[concat(concat(parameters('Project Name'), 'web'), '/317cab8f6891491ca239b6ed2d6c3f7e')]",
           "location": "Central US",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('sites_bikeshopaf_name'))]"
+              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
           ],
           "properties": {
               "id": "317cab8f6891491ca239b6ed2d6c3f7e",
@@ -253,10 +253,10 @@
       {
           "type": "Microsoft.Web/sites/deployments",
           "apiVersion": "2016-08-01",
-          "name": "[concat(parameters('sites_bikeshopaf_name'), '/cc06d67105c84a3bb9d23bc28863e6af')]",
+          "name": "[concat(concat(parameters('Project Name'), 'web'), '/cc06d67105c84a3bb9d23bc28863e6af')]",
           "location": "Central US",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('sites_bikeshopaf_name'))]"
+              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
           ],
           "properties": {
               "id": "cc06d67105c84a3bb9d23bc28863e6af",
@@ -273,10 +273,10 @@
       {
           "type": "Microsoft.Web/sites/deployments",
           "apiVersion": "2016-08-01",
-          "name": "[concat(parameters('sites_bikeshopaf_name'), '/f3a9e579b83f4b3abb951a3140c3591c')]",
+          "name": "[concat(concat(parameters('Project Name'), 'web'), '/f3a9e579b83f4b3abb951a3140c3591c')]",
           "location": "Central US",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('sites_bikeshopaf_name'))]"
+              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
           ],
           "properties": {
               "id": "f3a9e579b83f4b3abb951a3140c3591c",
@@ -293,10 +293,10 @@
       {
           "type": "Microsoft.Web/sites/hostNameBindings",
           "apiVersion": "2016-08-01",
-          "name": "[concat(parameters('sites_bikeshopaf_name'), '/', parameters('sites_bikeshopaf_name'), '.azurewebsites.net')]",
+          "name": "[concat(concat(parameters('Project Name'), 'web'), '/', concat(parameters('Project Name'), 'web'), '.azurewebsites.net')]",
           "location": "Central US",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('sites_bikeshopaf_name'))]"
+              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
           ],
           "properties": {
               "siteName": "bikeshopaf",
