@@ -1,343 +1,279 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "Project Name": {
-        "defaultValue": "projectname",
-        "type": "String"
-    }
-  },
-  "variables": {},
-  "resources": [      
-      {
-          "type": "Microsoft.Storage/storageAccounts",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(parameters('Project Name'), 'storage')]",
-          "location": "eastus",
-          "tags": {
-              "hidden-related:/providers/Microsoft.Web/sites/bikeshopaf": "empty"
-          },
-          "sku": {
-              "name": "Standard_LRS",
-              "tier": "Standard"
-          },
-          "kind": "Storage",
-          "properties": {
-              "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [],
-                  "ipRules": [],
-                  "defaultAction": "Allow"
-              },
-              "supportsHttpsTrafficOnly": false,
-              "encryption": {
-                  "services": {
-                      "file": {
-                          "enabled": true
-                      },
-                      "blob": {
-                          "enabled": true
-                      }
-                  },
-                  "keySource": "Microsoft.Storage"
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Web/serverfarms",
-          "apiVersion": "2016-09-01",
-          "name": "[concat(parameters('Project Name'), 'appservice')]",
-          "location": "Central US",
-          "sku": {
-              "name": "Y1",
-              "tier": "Dynamic",
-              "size": "Y1",
-              "family": "Y",
-              "capacity": 0
-          },
-          "kind": "functionapp",
-          "properties": {
-              "name": "[concat(parameters('Project Name'), 'appservice')]",
-              "perSiteScaling": false,
-              "reserved": false,
-              "targetWorkerCount": 0,
-              "targetWorkerSizeId": 0
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
-          ],
-          "properties": {
-              "cors": {
-                  "corsRules": []
-              },
-              "deleteRetentionPolicy": {
-                  "enabled": false
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
-          ],
-          "properties": {
-              "cors": {
-                  "corsRules": []
-              },
-              "deleteRetentionPolicy": {
-                  "enabled": false
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites",
-          "apiVersion": "2016-08-01",
-          "name": "[concat(parameters('Project Name'), 'web')]",
-          "location": "Central US",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'appservice'))]"
-          ],
-          "kind": "functionapp",
-          "properties": {
-              "enabled": true,
-              "hostNameSslStates": [
-                  {
-                      "name": "[concat(concat(parameters('Project Name'), 'web'), '.azurewebsites.net')]",
-                      "sslState": "Disabled",
-                      "hostType": "Standard"
-                  },
-                  {
-                      "name": "[concat(concat(parameters('Project Name'), 'web'), '.scm.azurewebsites.net')]",
-                      "sslState": "Disabled",
-                      "hostType": "Repository"
-                  }
-              ],
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'appservice'))]",
-              "reserved": false,
-              "scmSiteAlsoStopped": false,
-              "clientAffinityEnabled": false,
-              "clientCertEnabled": false,
-              "hostNamesDisabled": false,
-              "containerSize": 1536,
-              "dailyMemoryTimeQuota": 0,
-              "httpsOnly": true
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/config",
-          "apiVersion": "2016-08-01",
-          "name": "[concat(concat(parameters('Project Name'), 'web'), '/web')]",
-          "location": "Central US",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
-          ],
-          "properties": {
-              "numberOfWorkers": 1,
-              "defaultDocuments": [
-                  "Default.htm",
-                  "Default.html",
-                  "Default.asp",
-                  "index.htm",
-                  "index.html",
-                  "iisstart.htm",
-                  "default.aspx",
-                  "index.php"
-              ],
-              "netFrameworkVersion": "v4.0",
-              "phpVersion": "5.6",
-              "pythonVersion": "",
-              "nodeVersion": "",
-              "linuxFxVersion": "",
-              "requestTracingEnabled": false,
-              "remoteDebuggingEnabled": false,
-              "remoteDebuggingVersion": "VS2017",
-              "httpLoggingEnabled": false,
-              "logsDirectorySizeLimit": 35,
-              "detailedErrorLoggingEnabled": false,
-              "publishingUsername": "$bikeshopaf",
-              "scmType": "None",
-              "use32BitWorkerProcess": true,
-              "webSocketsEnabled": false,
-              "alwaysOn": false,
-              "appCommandLine": "",
-              "managedPipelineMode": "Integrated",
-              "virtualApplications": [
-                  {
-                      "virtualPath": "/",
-                      "physicalPath": "site\\wwwroot",
-                      "preloadEnabled": false,
-                      "virtualDirectories": null
-                  }
-              ],
-              "winAuthAdminState": 0,
-              "winAuthTenantState": 0,
-              "customAppPoolIdentityAdminState": false,
-              "customAppPoolIdentityTenantState": false,
-              "loadBalancing": "LeastRequests",
-              "routingRules": [],
-              "experiments": {
-                  "rampUpRules": []
-              },
-              "autoHealEnabled": false,
-              "vnetName": "",
-              "siteAuthEnabled": false,
-              "siteAuthSettings": {
-                  "enabled": null,
-                  "unauthenticatedClientAction": null,
-                  "tokenStoreEnabled": null,
-                  "allowedExternalRedirectUrls": null,
-                  "defaultProvider": null,
-                  "clientId": null,
-                  "clientSecret": null,
-                  "clientSecretCertificateThumbprint": null,
-                  "issuer": null,
-                  "allowedAudiences": null,
-                  "additionalLoginParams": null,
-                  "isAadAutoProvisioned": false,
-                  "googleClientId": null,
-                  "googleClientSecret": null,
-                  "googleOAuthScopes": null,
-                  "facebookAppId": null,
-                  "facebookAppSecret": null,
-                  "facebookOAuthScopes": null,
-                  "twitterConsumerKey": null,
-                  "twitterConsumerSecret": null,
-                  "microsoftAccountClientId": null,
-                  "microsoftAccountClientSecret": null,
-                  "microsoftAccountOAuthScopes": null
-              },
-              "cors": {
-                  "allowedOrigins": [
-                      "https://functions.azure.com",
-                      "https://functions-staging.azure.com",
-                      "https://functions-next.azure.com"
-                  ],
-                  "supportCredentials": false
-              },
-              "localMySqlEnabled": false,
-              "http20Enabled": false,
-              "minTlsVersion": "1.2",
-              "ftpsState": "AllAllowed",
-              "reservedInstanceCount": 0,
-              "fileChangeAuditEnabled": false,
-              "functionsRuntimeScaleMonitoringEnabled": false
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/deployments",
-          "apiVersion": "2016-08-01",
-          "name": "[concat(concat(parameters('Project Name'), 'web'), '/317cab8f6891491ca239b6ed2d6c3f7e')]",
-          "location": "Central US",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
-          ],
-          "properties": {
-              "id": "317cab8f6891491ca239b6ed2d6c3f7e",
-              "status": 4,
-              "author_email": "N/A",
-              "author": "N/A",
-              "deployer": "Push-Deployer",
-              "message": "Created via a push deployment",
-              "start_time": "2019-10-30T20:12:27.2872431Z",
-              "end_time": "2019-10-30T20:12:41.2410091Z",
-              "active": false
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/deployments",
-          "apiVersion": "2016-08-01",
-          "name": "[concat(concat(parameters('Project Name'), 'web'), '/cc06d67105c84a3bb9d23bc28863e6af')]",
-          "location": "Central US",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
-          ],
-          "properties": {
-              "id": "cc06d67105c84a3bb9d23bc28863e6af",
-              "status": 4,
-              "author_email": "N/A",
-              "author": "N/A",
-              "deployer": "Push-Deployer",
-              "message": "Created via a push deployment",
-              "start_time": "2019-10-30T20:21:57.3135159Z",
-              "end_time": "2019-10-30T20:22:12.5577109Z",
-              "active": false
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/deployments",
-          "apiVersion": "2016-08-01",
-          "name": "[concat(concat(parameters('Project Name'), 'web'), '/f3a9e579b83f4b3abb951a3140c3591c')]",
-          "location": "Central US",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
-          ],
-          "properties": {
-              "id": "f3a9e579b83f4b3abb951a3140c3591c",
-              "status": 4,
-              "author_email": "N/A",
-              "author": "N/A",
-              "deployer": "Push-Deployer",
-              "message": "Created via a push deployment",
-              "start_time": "2019-10-30T20:38:24.9324306Z",
-              "end_time": "2019-10-30T20:38:44.5333288Z",
-              "active": true
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "name": "[concat(concat(parameters('Project Name'), 'web'), '/', concat(parameters('Project Name'), 'web'), '.azurewebsites.net')]",
-          "location": "Central US",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'web'))]"
-          ],
-          "properties": {
-              "siteName": "bikeshopaf",
-              "hostNameType": "Verified"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/azure-webjobs-hosts')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
-          ],
-          "properties": {
-              "publicAccess": "None"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/azure-webjobs-secrets')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
-          ],
-          "properties": {
-              "publicAccess": "None"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-          "apiVersion": "2019-04-01",
-          "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/data')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
-          ],
-          "properties": {
-              "publicAccess": "None"
-          }
-      }
-  ]
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Project Name": {
+            "defaultValue": "projectname",
+            "type": "String"
+        },
+        "sites_borfunctionapp_name": {
+            "defaultValue": "borfunctionapp",
+            "type": "String"
+        },
+        "serverfarms_ASP_BOR_86ba_name": {
+            "defaultValue": "ASP-BOR-86ba",
+            "type": "String"
+        },
+        "components_borfunctionapp_name": {
+            "defaultValue": "borfunctionapp",
+            "type": "String"
+        },
+        "storageAccounts_borstorage_name": {
+            "defaultValue": "borstorage",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "name": "[concat(parameters('Project Name'), 'functionapp')]",
+            "location": "centralus",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "Request_Source": "IbizaWebAppExtensionCreate"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('Project Name'), 'storage')]",
+            "location": "centralus",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[concat(parameters('Project Name'), 'web')]",
+            "location": "Central US",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "properties": {
+                "name": "[concat(parameters('Project Name'), 'web')]",
+                "perSiteScaling": false,
+                "reserved": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('Project Name'), 'functionapp')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'web'))]"
+            ],
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(concat(parameters('Project Name'), 'functionapp'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(concat(parameters('Project Name'), 'functionapp'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('Project Name'), 'web'))]",
+                "reserved": false,
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(concat(parameters('Project Name'), 'functionapp'), '/web')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'functionapp'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "phpVersion": "5.6",
+                "pythonVersion": "",
+                "nodeVersion": "",
+                "linuxFxVersion": "",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$borfunctionapp",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "appCommandLine": "",
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false,
+                        "virtualDirectories": null
+                    }
+                ],
+                "winAuthAdminState": 0,
+                "winAuthTenantState": 0,
+                "customAppPoolIdentityAdminState": false,
+                "customAppPoolIdentityTenantState": false,
+                "loadBalancing": "LeastRequests",
+                "routingRules": [],
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetName": "",
+                "siteAuthEnabled": false,
+                "siteAuthSettings": {
+                    "enabled": null,
+                    "unauthenticatedClientAction": null,
+                    "tokenStoreEnabled": null,
+                    "allowedExternalRedirectUrls": null,
+                    "defaultProvider": null,
+                    "clientId": null,
+                    "clientSecret": null,
+                    "clientSecretCertificateThumbprint": null,
+                    "issuer": null,
+                    "allowedAudiences": null,
+                    "additionalLoginParams": null,
+                    "isAadAutoProvisioned": false,
+                    "googleClientId": null,
+                    "googleClientSecret": null,
+                    "googleOAuthScopes": null,
+                    "facebookAppId": null,
+                    "facebookAppSecret": null,
+                    "facebookOAuthScopes": null,
+                    "twitterConsumerKey": null,
+                    "twitterConsumerSecret": null,
+                    "microsoftAccountClientId": null,
+                    "microsoftAccountClientSecret": null,
+                    "microsoftAccountOAuthScopes": null
+                },
+                "cors": {
+                    "allowedOrigins": [
+                        "https://functions.azure.com",
+                        "https://functions-staging.azure.com",
+                        "https://functions-next.azure.com"
+                    ],
+                    "supportCredentials": false
+                },
+                "localMySqlEnabled": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "ftpsState": "AllAllowed",
+                "reservedInstanceCount": 0,
+                "fileChangeAuditEnabled": false,
+                "functionsRuntimeScaleMonitoringEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(concat(parameters('Project Name'), 'functionapp'), '/', concat(parameters('Project Name'), 'functionapp'), '.azurewebsites.net')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', concat(parameters('Project Name'), 'functionapp'))]"
+            ],
+            "properties": {
+                "siteName": "borfunctionapp",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/azure-webjobs-hosts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(concat(parameters('Project Name'), 'storage'), '/default/azure-webjobs-secrets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', concat(parameters('Project Name'), 'storage'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', concat(parameters('Project Name'), 'storage'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        }
+    ]
 }
